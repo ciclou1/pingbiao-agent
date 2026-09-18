@@ -1,0 +1,104 @@
+{
+  "case": "平海电厂输煤备件（合成样例）",
+  "project_id": 3,
+  "ts": "20260918-103500",
+  "extract": {
+    "expected": 14,
+    "matched": 14,
+    "extracted_total": 18,
+    "recall": 1.0,
+    "precision": 0.778,
+    "f1": 0.875,
+    "page_acc": 1.0
+  },
+  "review": {
+    "decisive": 9,
+    "correct": 9,
+    "accuracy": 1.0,
+    "leaks": 0,
+    "false_fails": 0,
+    "pending": 0
+  },
+  "citation": {
+    "checked": 1,
+    "ok": 1,
+    "accuracy": 1.0
+  },
+  "rows": [
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "最高限价118万元",
+      "state": "passed",
+      "ai_state": "passed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "至少2个",
+      "state": "passed",
+      "ai_state": "passed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "投标有效期不足90日",
+      "state": "passed",
+      "ai_state": "passed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "独立法人资格",
+      "state": "passed",
+      "ai_state": "passed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "至少2个",
+      "state": "failed",
+      "ai_state": "failed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "投标有效期不足90日",
+      "state": "failed",
+      "ai_state": "failed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "最高限价118万元",
+      "state": "passed",
+      "ai_state": "passed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人丙",
+      "clause_contains": "最高限价118万元",
+      "state": "failed",
+      "ai_state": "failed",
+      "verdict": "命中"
+    },
+    {
+      "bidder": "投标人丙",
+      "clause_contains": "投标有效期不足90日",
+      "state": "passed",
+      "ai_state": "passed",
+      "verdict": "命中"
+    }
+  ],
+  "cite_rows": [
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "投标有效期不足90日",
+      "page": 1,
+      "cited_pages": [
+        1,
+        2
+      ],
+      "ok": true
+    }
+  ]
+}

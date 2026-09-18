@@ -1,0 +1,10 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+pillow==11.0.0
+numpy==1.26.4
+setuptools==75.6.0
+# OCR 引擎（构建期下载模型并烘焙进镜像；RapidOCR 与 PaddleOCR 用同一套 PP-OCR 模型）
+paddlepaddle==2.6.2
+paddleocr==2.9.1
+rapidocr-onnxruntime==1.4.4

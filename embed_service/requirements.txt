@@ -1,0 +1,5 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+# torch 单独用 CPU 源安装（见 Dockerfile），避免拖入 CUDA 依赖
+sentence-transformers==3.3.1
+transformers==4.47.1

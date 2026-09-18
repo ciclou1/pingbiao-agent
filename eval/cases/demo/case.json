@@ -1,0 +1,143 @@
+{
+  "name": "平海电厂输煤备件（合成样例）",
+  "note": "合成样例用于回归；真实项目请按同结构放文件与 case.json",
+  "control_price": 120,
+  "tender": "tender.pdf",
+  "bids": {
+    "投标人甲": [
+      "投标人甲.pdf"
+    ],
+    "投标人乙": [
+      "投标人乙.pdf"
+    ],
+    "投标人丙": [
+      "投标人丙.pdf"
+    ]
+  },
+  "expected_items": [
+    {
+      "type": "qualification",
+      "clause_contains": "独立法人资格",
+      "page": 2
+    },
+    {
+      "type": "qualification",
+      "clause_contains": "至少2个",
+      "page": 2
+    },
+    {
+      "type": "qualification",
+      "clause_contains": "财务状况良好",
+      "page": 2
+    },
+    {
+      "type": "qualification",
+      "clause_contains": "项目负责人",
+      "page": 2
+    },
+    {
+      "type": "qualification",
+      "clause_contains": "ISO9001",
+      "page": 2
+    },
+    {
+      "type": "compliance",
+      "clause_contains": "签字盖章",
+      "page": 4
+    },
+    {
+      "type": "compliance",
+      "clause_contains": "最高限价118万元",
+      "page": 4
+    },
+    {
+      "type": "compliance",
+      "clause_contains": "投标有效期不足90日",
+      "page": 4
+    },
+    {
+      "type": "compliance",
+      "clause_contains": "投标保证金未按时",
+      "page": 4
+    },
+    {
+      "type": "compliance",
+      "clause_contains": "失信被执行人",
+      "page": 4
+    },
+    {
+      "type": "scoring",
+      "clause_contains": "投标报价（40分）",
+      "page": 5
+    },
+    {
+      "type": "scoring",
+      "clause_contains": "类似业绩（20分）",
+      "page": 5
+    },
+    {
+      "type": "scoring",
+      "clause_contains": "技术方案（25分）",
+      "page": 5
+    },
+    {
+      "type": "scoring",
+      "clause_contains": "企业资质信誉（15分）",
+      "page": 5
+    }
+  ],
+  "expected_reviews": [
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "最高限价118万元",
+      "state": "passed"
+    },
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "至少2个",
+      "state": "passed"
+    },
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "投标有效期不足90日",
+      "state": "passed"
+    },
+    {
+      "bidder": "投标人甲",
+      "clause_contains": "独立法人资格",
+      "state": "passed"
+    },
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "至少2个",
+      "state": "failed"
+    },
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "投标有效期不足90日",
+      "state": "failed"
+    },
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "最高限价118万元",
+      "state": "passed"
+    },
+    {
+      "bidder": "投标人丙",
+      "clause_contains": "最高限价118万元",
+      "state": "failed"
+    },
+    {
+      "bidder": "投标人丙",
+      "clause_contains": "投标有效期不足90日",
+      "state": "passed"
+    }
+  ],
+  "expected_evidence": [
+    {
+      "bidder": "投标人乙",
+      "clause_contains": "投标有效期不足90日",
+      "page": 1
+    }
+  ]
+}

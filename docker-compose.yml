@@ -1,0 +1,106 @@
+services:
+  db:
+    # pgvector 版 postgres 16：同主版本，数据目录兼容；提供向量检索能力
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: pingbiao
+      POSTGRES_PASSWORD: pingbiao_pass
+      POSTGRES_DB: pingbiao
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pingbiao"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./backend
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://pingbiao:pingbiao_pass@db:5432/pingbiao
+      FILES_DIR: /data/files
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+    volumes:
+      - files:/data/files
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  # 后台任务独立进程：解析/抽取/审查等长任务不抢 API 的事件循环
+  worker:
+    build: ./backend
+    command: ["python", "-m", "app.worker"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://pingbiao:pingbiao_pass@db:5432/pingbiao
+      FILES_DIR: /data/files
+    depends_on:
+      db:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    volumes:
+      - files:/data/files
+    restart: unless-stopped
+
+  # 向量化服务（BGE-M3，CPU）：模型目录由宿主机挂载，重建镜像不重下 2.3GB
+  # 服务不可用时检索自动退回关键词模式，不影响主流程
+  embed:
+    build: ./embed_service
+    environment:
+      TZ: Asia/Shanghai
+      MODEL_DIR: /models/bge-m3
+      EMBED_BATCH: ${EMBED_BATCH:-8}
+      EMBED_WORKERS: ${EMBED_WORKERS:-1}
+    volumes:
+      - ./models:/models:ro
+    expose:
+      - "8900"
+    ports:
+      # 仅供本机自测；容器间通过 http://embed:8900 访问
+      - "127.0.0.1:8900:8900"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8900/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    restart: unless-stopped
+
+  # OCR 独立服务（可选）：docker compose --profile ocr up -d ocr
+  # 不启用时扫描件标记为「需人工」，主流程不受影响
+  ocr:
+    build: ./ocr_service
+    profiles: ["ocr"]
+    environment:
+      TZ: Asia/Shanghai
+      # auto：子进程探测 PaddleOCR，不可用则自动用 RapidOCR（同 PP-OCR 模型 + ONNX 运行时）
+      OCR_ENGINE: ${OCR_ENGINE:-auto}
+      OCR_WORKERS: ${OCR_WORKERS:-2}
+    expose:
+      - "8800"
+    ports:
+      # 仅供本机调试/自测（不暴露到局域网）；容器间通过 http://ocr:8800 访问
+      - "127.0.0.1:8800:8800"
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    ports:
+      - "5180:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  files:
